@@ -5,6 +5,6 @@
 *.spec
 Pipfile
 Pipfile.*
-./releases/**
+./release/**
 ./build/**
 ./dist/**
