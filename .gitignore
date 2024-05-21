@@ -2,3 +2,7 @@
 *.pyc
 *.pyd
 *.pyo
+*.spec
+Pipfile
+Pipfile.*
+./releases/**
