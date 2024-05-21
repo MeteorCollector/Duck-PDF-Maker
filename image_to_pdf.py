@@ -1,18 +1,19 @@
 import os
-from tkinter import Tk, Button, Label, Listbox, Scrollbar, filedialog
+from tkinter import Label, Listbox, Scrollbar, Button, filedialog
 from PIL import Image
 from reportlab.lib.pagesizes import letter
 from reportlab.pdfgen import canvas
 
 class ImageToPdfConverter:
-    def __init__(self, master):
+    def __init__(self, master, show_main_menu, texts):
         self.master = master
-        master.title("Image to PDF Converter")
+        self.show_main_menu = show_main_menu
+        self.texts=texts
 
         self.image_files = []
 
-        self.label = Label(master, text="Select Image Files:")
-        self.label.pack()
+        self.frame = Label(master, text=self.texts['select_images'])
+        self.frame.pack()
 
         self.listbox = Listbox(master, width=50, height=10, selectmode="extended")
         self.listbox.pack()
@@ -23,11 +24,17 @@ class ImageToPdfConverter:
 
         self.listbox.config(yscrollcommand=self.scrollbar.set)
 
-        self.add_button = Button(master, text="Add Image", command=self.add_image)
+        self.add_button = Button(master, text=self.texts['add_image'], command=self.add_image)
         self.add_button.pack()
 
-        self.convert_button = Button(master, text="Convert to PDF", command=self.convert_to_pdf)
+        self.remove_button = Button(master, text=self.texts['remove_selected'], command=self.remove_selected)
+        self.remove_button.pack()
+
+        self.convert_button = Button(master, text=self.texts['convert_to_pdf'], command=self.convert_to_pdf)
         self.convert_button.pack()
+
+        self.back_button = Button(master, text=self.texts['back_to_menu'], command=self.show_main_menu)
+        self.back_button.pack()
 
     def add_image(self):
         file_paths = filedialog.askopenfilenames(title="Select Image Files", filetypes=[
@@ -42,8 +49,15 @@ class ImageToPdfConverter:
                     ("image", ".bmp"),
                 ])
         for file_path in file_paths:
-            self.image_files.append(file_path)
-            self.listbox.insert("end", os.path.basename(file_path))
+            if file_path not in self.image_files:
+                self.image_files.append(file_path)
+                self.listbox.insert("end", os.path.basename(file_path))
+
+    def remove_selected(self):
+        selected_indices = list(self.listbox.curselection())
+        for index in selected_indices[::-1]:
+            self.image_files.pop(index)
+            self.listbox.delete(index)
 
     def convert_to_pdf(self):
         if not self.image_files:
@@ -70,7 +84,11 @@ class ImageToPdfConverter:
         self.listbox.delete(0, "end")
         print("PDF created successfully.")
 
-if __name__ == "__main__":
-    root = Tk()
-    app = ImageToPdfConverter(root)
-    root.mainloop()
+    
+    def update_texts(self, texts):
+        self.texts = texts
+        self.frame.config(text=self.texts['select_images'])
+        self.add_button.config(text=self.texts['add_image'])
+        self.remove_button.config(text=self.texts['remove_selected'])
+        self.convert_button.config(text=self.texts['convert_to_pdf'])
+        self.back_button.config(text=self.texts['back_to_menu'])
