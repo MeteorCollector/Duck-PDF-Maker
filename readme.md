@@ -4,6 +4,12 @@ I'm tired of searching online pdf editing platforms and being annoyed by their f
 
 网上PDF转换的工具用多了基本都开始收费了，就这么个简单的玩意儿有什么可收费的？于是在 ChatGPT 的协助之下极速开发了一个免费工具。
 
+## Friendly Link 友情链接
+
+Check out [PDF patcher](https://github.com/wmjordan/PDFPatcher), a much more powerful open-source PDF tool.
+
+根据我想到的一定有人做过了的原则，写完了之后发现了 [PDF patcher](https://github.com/wmjordan/PDFPatcher)，这是更强大的开源软件，赞美原作者。
+
 ## Use 使用
 
 Check [releases](https://github.com/MeteorCollector/Duck-PDF-Maker/releases) for downloadable binaries. Windows and Linux supported.
