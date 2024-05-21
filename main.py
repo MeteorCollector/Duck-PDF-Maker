@@ -1,76 +1,71 @@
-import os
-from tkinter import Tk, Button, Label, Listbox, Scrollbar, filedialog
-from PIL import Image
-from reportlab.lib.pagesizes import letter
-from reportlab.pdfgen import canvas
+from tkinter import Tk, Frame, Button, Label, StringVar, OptionMenu
+from image_to_pdf import ImageToPdfConverter
+from pdf_to_image import PdfToImageConverter
+from split_pdf import SplitPdfConverter
+from merge_pdf import MergePdfConverter
+from lang import LANGUAGES
 
-class ImageToPdfConverter:
+class App:
     def __init__(self, master):
         self.master = master
-        master.title("Image to PDF Converter")
+        self.current_lang = 'en'
+        self.texts = LANGUAGES[self.current_lang]
+        
+        master.title(self.texts['title'])
 
-        self.image_files = []
+        self.main_menu = Frame(master)
+        self.image_to_pdf_frame = Frame(master)
+        self.pdf_to_image_frame = Frame(master)
+        self.split_pdf_frame = Frame(master)
+        self.merge_pdf_frame = Frame(master)
 
-        self.label = Label(master, text="Select Image Files:")
-        self.label.pack()
+        self.lang_var = StringVar(master)
+        self.lang_var.set(self.current_lang)
+        self.lang_menu = OptionMenu(master, self.lang_var, *LANGUAGES.keys(), command=self.change_language)
+        self.lang_menu.pack()
 
-        self.listbox = Listbox(master, width=50, height=10, selectmode="extended")
-        self.listbox.pack()
+        self.create_main_menu()
+        self.image_to_pdf_converter = ImageToPdfConverter(self.image_to_pdf_frame, self.show_main_menu, self.texts)
+        self.pdf_to_image_converter = PdfToImageConverter(self.pdf_to_image_frame, self.show_main_menu, self.texts)
+        self.split_pdf_converter = SplitPdfConverter(self.split_pdf_frame, self.show_main_menu, self.texts)
+        self.merge_pdf_converter = MergePdfConverter(self.merge_pdf_frame, self.show_main_menu, self.texts)
 
-        self.scrollbar = Scrollbar(master, orient="vertical")
-        self.scrollbar.config(command=self.listbox.yview)
-        self.scrollbar.pack(side="right", fill="y")
+        self.show_frame(self.main_menu)
 
-        self.listbox.config(yscrollcommand=self.scrollbar.set)
+    def create_main_menu(self):
+        for widget in self.main_menu.winfo_children():
+            widget.destroy()
 
-        self.add_button = Button(master, text="Add Image", command=self.add_image)
-        self.add_button.pack()
+        Label(self.main_menu, text=self.texts['select_option']).pack()
+        Button(self.main_menu, text=self.texts['image_to_pdf'], command=lambda: self.show_frame(self.image_to_pdf_frame)).pack()
+        Button(self.main_menu, text=self.texts['pdf_to_image'], command=lambda: self.show_frame(self.pdf_to_image_frame)).pack()
+        Button(self.main_menu, text=self.texts['split_pdf'], command=lambda: self.show_frame(self.split_pdf_frame)).pack()
+        Button(self.main_menu, text=self.texts['merge_pdfs'], command=lambda: self.show_frame(self.merge_pdf_frame)).pack()
+        Label(self.main_menu, text=self.texts['description']).pack()
 
-        self.convert_button = Button(master, text="Convert to PDF", command=self.convert_to_pdf)
-        self.convert_button.pack()
+    def show_frame(self, frame):
+        self.main_menu.pack_forget()
+        self.image_to_pdf_frame.pack_forget()
+        self.pdf_to_image_frame.pack_forget()
+        self.split_pdf_frame.pack_forget()
+        self.merge_pdf_frame.pack_forget()
+        frame.pack()
 
-    def add_image(self):
-        file_paths = filedialog.askopenfilenames(title="Select Image Files", filetypes=[
-                    ("image", ".jpg"),
-                    ("image", ".jpeg"),
-                    ("image", ".png"),
-                    ("image", ".JPG"),
-                    ("image", ".JPEG"),
-                    ("image", ".PNG"),
-                    ("image", ".gif"),
-                    ("image", ".tiff"),
-                    ("image", ".bmp"),
-                ])
-        for file_path in file_paths:
-            self.image_files.append(file_path)
-            self.listbox.insert("end", os.path.basename(file_path))
+    def show_main_menu(self):
+        self.show_frame(self.main_menu)
 
-    def convert_to_pdf(self):
-        if not self.image_files:
-            return
-
-        output_pdf_path = filedialog.asksaveasfilename(defaultextension=".pdf", filetypes=[("PDF Files", "*.pdf")])
-        if not output_pdf_path:
-            return
-
-        c = canvas.Canvas(output_pdf_path, pagesize=letter)
-        width, height = letter
-        for image_file in self.image_files:
-            img = Image.open(image_file)
-            img_width, img_height = img.size
-            aspect_ratio = img_height / float(img_width)
-            img_width = width
-            img_height = int(width * aspect_ratio)
-            c.setPageSize((img_width, img_height))
-            c.drawImage(image_file, 0, 0, width=img_width, height=img_height)
-            c.showPage()
-        c.save()
-
-        self.image_files.clear()
-        self.listbox.delete(0, "end")
-        print("PDF created successfully.")
+    def change_language(self, lang):
+        self.current_lang = lang
+        self.texts = LANGUAGES[self.current_lang]
+        self.master.title(self.texts['title'])
+        self.create_main_menu()
+        self.image_to_pdf_converter.update_texts(self.texts)
+        self.pdf_to_image_converter.update_texts(self.texts)
+        self.split_pdf_converter.update_texts(self.texts)
+        self.merge_pdf_converter.update_texts(self.texts)
 
 if __name__ == "__main__":
     root = Tk()
-    app = ImageToPdfConverter(root)
+    app = App(root)
+    root.geometry("600x400")
     root.mainloop()
