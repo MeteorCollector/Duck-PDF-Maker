@@ -6,3 +6,5 @@
 Pipfile
 Pipfile.*
 ./releases/**
+./build/**
+./dist/**
