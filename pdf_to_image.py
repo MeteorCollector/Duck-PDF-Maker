@@ -4,8 +4,10 @@ import fitz  # PyMuPDF
 
 class PdfToImageConverter:
     def __init__(self, master, show_main_menu, texts):
+       
         self.master = master
         self.show_main_menu = show_main_menu
+        self.texts=texts
 
         self.pdf_path = None
         self.default_min_length = 1920
@@ -49,6 +51,7 @@ class PdfToImageConverter:
         if not output_dir:
             return
 
+        self.pdf_label.config(text=self.texts['processing'])
         # min_length = self.min_length_var.get()
 
         doc = fitz.open(self.pdf_path)
@@ -61,6 +64,7 @@ class PdfToImageConverter:
             pix.save(output_file)
         doc.close()
         print("Images saved successfully.")
+        self.pdf_label.config(text=self.texts['finished'])
     
     def update_texts(self, texts):
         self.texts = texts

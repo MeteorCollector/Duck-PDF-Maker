@@ -1,4 +1,4 @@
-from tkinter import Tk, Frame, Button, Label, StringVar, OptionMenu
+from tkinter import Tk, Frame, Button, Label, StringVar, OptionMenu, ttk
 from image_to_pdf import ImageToPdfConverter
 from pdf_to_image import PdfToImageConverter
 from split_pdf import SplitPdfConverter

@@ -4,8 +4,10 @@ from PyPDF2 import PdfReader, PdfWriter
 
 class SplitPdfConverter:
     def __init__(self, master, show_main_menu, texts):
+        
         self.master = master
         self.show_main_menu = show_main_menu
+        self.texts=texts
 
         self.pdf_path = None
 
@@ -39,6 +41,8 @@ class SplitPdfConverter:
         if not output_dir:
             return
 
+        self.pdf_label.config(text=self.texts['processing'])
+        
         pdf_reader = PdfReader(self.pdf_path)
         for page_num in range(len(pdf_reader.pages)):
             pdf_writer = PdfWriter()
@@ -49,6 +53,7 @@ class SplitPdfConverter:
                 pdf_writer.write(out_file)
 
         print("PDF split successfully.")
+        self.pdf_label.config(text=self.texts['finished'])
     
     def update_texts(self, texts):
         self.texts = texts

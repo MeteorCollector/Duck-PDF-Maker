@@ -4,8 +4,10 @@ from PyPDF2 import PdfMerger
 
 class MergePdfConverter:
     def __init__(self, master, show_main_menu, texts):
+        
         self.master = master
         self.show_main_menu = show_main_menu
+        self.texts=texts
 
         self.pdf_files = []
 
@@ -33,6 +35,9 @@ class MergePdfConverter:
         self.back_button = Button(master, text=texts["back_to_menu"], command=self.show_main_menu)
         self.back_button.pack()
 
+        self.msg_label = Label(master, text="")
+        self.msg_label.pack()
+
     def add_pdfs(self):
         file_paths = filedialog.askopenfilenames(title="Select PDF Files", filetypes=[("PDF Files", "*.pdf")])
         for file_path in file_paths:
@@ -54,6 +59,8 @@ class MergePdfConverter:
         if not output_pdf_path:
             return
 
+        self.msg_label.config(text=self.texts['processing'])
+        
         pdf_merger = PdfMerger()
         for pdf_file in self.pdf_files:
             pdf_merger.append(pdf_file)
@@ -64,7 +71,9 @@ class MergePdfConverter:
         pdf_merger.close()
         self.pdf_files.clear()
         self.listbox.delete(0, END)
+        
         print("PDFs merged successfully.")
+        self.msg_label.config(text=self.texts['finished'])
     
     def update_texts(self, texts):
         self.texts = texts

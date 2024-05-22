@@ -21,7 +21,9 @@ LANGUAGES = {
         'select_pdfs_merge': "Select PDF Files to Merge:",
         'add_pdf_files': "Add PDF Files",
         'merge_pdfs_button': "Merge PDFs",
-        'description': "This is an open-source software, \nwhich means you should not be charged for using it. \nThe project is available at:\n https://github.com/MeteorCollector/Duck-PDF-Maker",
+        'description': "\nThis is an open-source software, \nwhich means you should not be charged for using it. \nThe project is available at:\n https://github.com/MeteorCollector/Duck-PDF-Maker",
+        'finished': "Transform finished! (  = w = )",
+        'processing': "Processing...",
     },
     '中文（简体）': {
         'title': "鸭子PDF编辑器",
@@ -43,6 +45,8 @@ LANGUAGES = {
         'select_pdfs_merge': "选择要合并的PDF文件：",
         'add_pdf_files': "添加PDF文件",
         'merge_pdfs_button': "合并PDF",
-        'description': "这是一个开源软件，\n这意味着你不应该因为使用该软件而被收费。\n该项目地址：\n https://github.com/MeteorCollector/Duck-PDF-Maker",
+        'description': "\n这是一个开源软件，\n这意味着你不应该因为使用该软件而被收费。\n该项目地址：\n https://github.com/MeteorCollector/Duck-PDF-Maker",
+        'finished': "转换完成！ (  = w = )",
+        'processing': "转换中...",
     }
 }

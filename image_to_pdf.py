@@ -6,6 +6,7 @@ from reportlab.pdfgen import canvas
 
 class ImageToPdfConverter:
     def __init__(self, master, show_main_menu, texts):
+        
         self.master = master
         self.show_main_menu = show_main_menu
         self.texts=texts
@@ -35,6 +36,9 @@ class ImageToPdfConverter:
 
         self.back_button = Button(master, text=self.texts['back_to_menu'], command=self.show_main_menu)
         self.back_button.pack()
+
+        self.msg_label = Label(master, text="")
+        self.msg_label.pack()
 
     def add_image(self):
         file_paths = filedialog.askopenfilenames(title="Select Image Files", filetypes=[
@@ -67,6 +71,8 @@ class ImageToPdfConverter:
         if not output_pdf_path:
             return
 
+        self.msg_label.config(text=self.texts['processing'])
+
         c = canvas.Canvas(output_pdf_path, pagesize=letter)
         width, height = letter
         for image_file in self.image_files:
@@ -83,6 +89,7 @@ class ImageToPdfConverter:
         self.image_files.clear()
         self.listbox.delete(0, "end")
         print("PDF created successfully.")
+        self.msg_label.config(text=self.texts['finished'])
 
     
     def update_texts(self, texts):
