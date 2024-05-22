@@ -1,10 +1,10 @@
-./__pycache__/**
+__pycache__/
 *.pyc
 *.pyd
 *.pyo
 *.spec
 Pipfile
 Pipfile.*
-./release/**
-./build/**
-./dist/**
+release/
+build/
+dist/
