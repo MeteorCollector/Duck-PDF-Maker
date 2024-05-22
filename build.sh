@@ -1,0 +1,1 @@
+pyinstaller --onefile -w -icon=duck.ico main.py

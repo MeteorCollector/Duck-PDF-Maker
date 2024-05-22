@@ -1,0 +1,1 @@
+pipenv install pyinstaller pillow reportlab PyPDF2 PyMuPDF
